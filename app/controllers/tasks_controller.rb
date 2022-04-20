@@ -3,7 +3,9 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
-    @tasks = Task.all
+    # @tasks = Task.all
+    @q = Task.ransack(params[:q])
+    @tasks = @q.result(distinct: true)
   end
 
   # GET /tasks/1
@@ -43,6 +45,11 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
     redirect_to tasks_url, notice: 'Task was successfully destroyed.'
+  end
+
+  def search
+    index
+    render :index
   end
 
   private
